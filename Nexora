@@ -1,0 +1,112 @@
+# Nexora
+
+**Nexora** is a fast, developer-focused GitHub repository intelligence tool that scans projects for security risks, dependency issues, code quality signals, repository health, and configuration problems.
+
+## Features
+
+* 🔐 Secret and sensitive-file detection
+* 📦 Dependency vulnerability scanning
+* 🧹 Repository health analysis
+* ⚙️ GitHub Actions workflow inspection
+* 📝 README and documentation checks
+* 🌿 Branch and commit activity analysis
+* 📊 Repository health score
+* 🧩 JSON output for automation
+* 🚀 CI/CD friendly
+* ⚡ Fast parallel scanning
+
+## Installation
+
+```bash
+git clone https://github.com/yourname/nexora.git
+cd nexora
+
+python -m venv .venv
+
+# Linux / macOS
+source .venv/bin/activate
+
+# Windows
+.venv\Scripts\activate
+
+pip install -r requirements.txt
+```
+
+## Usage
+
+```bash
+python nexora.py .
+```
+
+Scan a specific repository:
+
+```bash
+python nexora.py ./my-project
+```
+
+Export results as JSON:
+
+```bash
+python nexora.py . --format json --output report.json
+```
+
+## Example Output
+
+```text
+NEXORA REPOSITORY SCAN
+────────────────────────────────────────
+
+Repository      my-project
+Files scanned   184
+Commits         427
+Branches        6
+
+SECURITY
+  Secrets found          0
+  Suspicious files       1
+  Dependency issues      2
+
+QUALITY
+  Missing README         NO
+  Missing LICENSE        YES
+  CI configuration       YES
+  Test coverage          78%
+
+HEALTH SCORE              87/100
+
+Status: HEALTHY
+```
+
+## Architecture
+
+```text
+Nexora
+│
+├── Scanner
+│   ├── File Scanner
+│   ├── Secret Scanner
+│   ├── Dependency Scanner
+│   └── Git Scanner
+│
+├── Analyzers
+│   ├── Security Analyzer
+│   ├── Quality Analyzer
+│   └── Repository Health Analyzer
+│
+├── Reporters
+│   ├── Terminal
+│   └── JSON
+│
+└── CI Integration
+    └── GitHub Actions
+```
+
+## Why Nexora?
+
+Modern repositories contain far more than source code. Secrets, dependencies, CI workflows, configuration files, and documentation all affect the security and maintainability of a project.
+
+Nexora brings these signals together into one simple developer workflow.
+
+## License
+
+MIT
