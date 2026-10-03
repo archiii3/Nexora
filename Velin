@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Velin</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      font-family: Inter, system-ui, sans-serif;
+      background: #0d0f12;
+      color: #f2f4f7;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 720px;
+      padding: 28px;
+      border: 1px solid #252a31;
+      border-radius: 18px;
+      background: #15181d;
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      margin: 0 0 24px;
+      color: #8c949f;
+      font-size: 14px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 260px;
+      resize: vertical;
+      padding: 16px;
+      border: 1px solid #2b3139;
+      border-radius: 12px;
+      outline: none;
+      background: #0d0f12;
+      color: #f2f4f7;
+      font: inherit;
+      line-height: 1.6;
+    }
+
+    textarea:focus {
+      border-color: #59636f;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 11px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      background: #f2f4f7;
+      color: #101216;
+    }
+
+    button.secondary {
+      background: #242930;
+      color: #e5e8ec;
+    }
+
+    button:hover {
+      opacity: 0.88;
+    }
+
+    #status {
+      min-height: 20px;
+      margin-top: 14px;
+      color: #8c949f;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="app">
+    <h1>Velin</h1>
+    <p class="subtitle">A lightweight local text vault. Nothing leaves your browser.</p>
+
+    <textarea id="vault" placeholder="Write or paste something private..."></textarea>
+
+    <div class="actions">
+      <button onclick="saveVault()">Save Locally</button>
+      <button class="secondary" onclick="loadVault()">Load</button>
+      <button class="secondary" onclick="copyVault()">Copy</button>
+      <button class="secondary" onclick="clearVault()">Clear</button>
+    </div>
+
+    <div id="status"></div>
+  </main>
+
+  <script>
+    const vault = document.getElementById("vault");
+    const status = document.getElementById("status");
+
+    function setStatus(message) {
+      status.textContent = message;
+
+      clearTimeout(setStatus.timer);
+      setStatus.timer = setTimeout(() => {
+        status.textContent = "";
+      }, 2500);
+    }
+
+    function saveVault() {
+      localStorage.setItem("velin-vault", vault.value);
+      setStatus("Saved locally.");
+    }
+
+    function loadVault() {
+      const saved = localStorage.getItem("velin-vault");
+
+      if (saved === null) {
+        setStatus("Nothing saved yet.");
+        return;
+      }
+
+      vault.value = saved;
+      setStatus("Loaded from local storage.");
+    }
+
+    async function copyVault() {
+      if (!vault.value) {
+        setStatus("Nothing to copy.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(vault.value);
+        setStatus("Copied to clipboard.");
+      } catch {
+        setStatus("Clipboard access was blocked.");
+      }
+    }
+
+    function clearVault() {
+      vault.value = "";
+      localStorage.removeItem("velin-vault");
+      setStatus("Vault cleared.");
+    }
+
+    // Automatically restore saved content when the page opens.
+    window.addEventListener("DOMContentLoaded", loadVault);
+  </script>
+</body>
+</html>
